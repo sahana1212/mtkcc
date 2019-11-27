@@ -1,8 +1,9 @@
 version: '2'
-
-
 services:
-  atmosphere:
-    build: . 
-    ports:
-      - '30098:8080'
+  web:
+    image: tomcat
+    ports: 
+      - "8080:8080"
+    volumes:
+      - ./target/*.war:/usr/local/tomcat/webapps/ROOT.war
+      #- ./target/DockerExample:/usr/local/tomcat/webapps/ROOT
