@@ -1,48 +1,43 @@
- ---
-- hosts: all
-  become: true
-  vars:
-    create_containers: 4
-    default_container_name: docker
-    default_container_image: ubuntu
-    default_container_command: sleep 1d
-
+---
+- name: Create Docker Container
+  hosts: localhost
+  connection: local  
+  remote_user: root
   tasks:
-    - name: Install aptitude using apt
-      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
-
-    - name: Install required system packages
-      apt: name={{ item }} state=latest update_cache=yes
-      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
-
-    - name: Add Docker GPG apt Key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker Repository
-      apt_repository:
-        repo: deb https://download.docker.com/linux/ubuntu bionic stable
-        state: present
-
-    - name: Update apt and install docker-ce
-      apt: update_cache=yes name=docker-ce state=latest
-
-    - name: Install Docker Module for Python
-      pip:
-        name: docker
-
-    # Pull image specified by variable default_image from the Docker Hub
-    - name: Pull default Docker image
-      docker_image:
-        name: "{{ default_container_image }}"
-        source: pull
-
-    # Creates the number of containers defined by the variable create_containers, using default values
-    - name: Create default containers
+    - name: Install python-docker on Red Hat based distribution
+      yum:
+       name: python-docker
+       enablerepo: extras
+       state: latest
+      when: ansible_os_family == 'RedHat'
+    - name: Install python-docker  on Debian based distribution
+      apt: 
+        name: python-docker
+        update_cache: yes
+      when: ansible_os_family == 'Debian' 
+    - name: Log into DockerHub
+      docker_login:
+       username: sahana1212
+       password: sahana1212
+    - name: Create Container
       docker_container:
-        name: "{{ default_container_name }}{{ item }}"
-        image: "{{ default_container_image }}"
-        command: "{{ default_container_command }}"
-        state: present
-      with_sequence: count={{ create_containers }}
+        name: mtkcc
+        image: sahana1212/mtkcc
+        ports:
+          - 80:8081
+        volumes:
+          - ./db:/docker-entrypoint-initdb.d
+          - my-datavolume:/var/lib/mysql
+    - name: Create Systemd Unit File as docker-mtkcc.service
+      template: src=systemd.j2 dest=/etc/systemd/system/docker-mtkcc.service
+    - name: reload systemd daemon
+      command: systemctl daemon-reload 
+    - name: Start & Enable docker-mtkcc service
+      service:
+        name: docker-mtkcc
+        state: started
+        enabled: yes
+    - name: check container status
+      command: docker ps
+      register: result
+    - debug: var=result.stdout
