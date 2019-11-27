@@ -1,7 +1,7 @@
 FROM tomcat
 COPY MC*.war /usr/local/tomcat/webapps/
 COPY /var/lib/jenkins/workspace/DevOps201/target/MCC.war /usr/local/tomcat/webapps/
-EXPOSE 8080
+EXPOSE 8081
 # FROM openjdk:8
 
 # # Create DIR
