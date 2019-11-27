@@ -1,17 +1,17 @@
-#FROM tomcat
-#COPY MCC.war /usr/local/tomcat/webapps/
-#COPY /var/lib/jenkins/workspace/DevOps201/target/MCC.war /usr/local/tomcat/webapps/
-#EXPOSE 8080
-FROM openjdk:8
+FROM tomcat
+COPY MC*.war /usr/local/tomcat/webapps/
+COPY /var/lib/jenkins/workspace/DevOps201/target/MCC.war /usr/local/tomcat/webapps/
+EXPOSE 8080
+# FROM openjdk:8
 
-# Create DIR
-RUN mkdir -p /usr/src/myapp
+# # Create DIR
+# RUN mkdir -p /usr/src/myapp
 
-# COPY APPLICTAION COde
-COPY *.war    /usr/src/myapp
+# # COPY APPLICTAION COde
+# COPY *.war    /usr/src/myapp
 
-# Setup Working DIR
-WORKDIR /usr/src/myapp
+# # Setup Working DIR
+# WORKDIR /usr/src/myapp
 
-# Start the Bot Service
-CMD ["java", "-jar", "*.war"]
+# # Start the Bot Service
+# CMD ["java", "-jar", "*.war"]
