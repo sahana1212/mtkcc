@@ -15,7 +15,7 @@ services:
   web:
     container_name: web
     build: "./web"
-    dockerfile : ./Dockerfile
+    context: mtkcc/
     ports:
     - 80:8080
     depends_on:
