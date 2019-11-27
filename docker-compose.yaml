@@ -1,6 +1,6 @@
 version: '2'
-  services:
-    db:
+	services:
+	  db:
 	    container_name: db
 	    #latest mysql will not work, use only version 5.5
 	    image: mysql:5.5
