@@ -8,10 +8,10 @@ FROM openjdk:8
 RUN mkdir -p /usr/src/myapp
 
 # COPY APPLICTAION COde
-COPY target/*.jar    /usr/src/myapp
+COPY *.war    /usr/src/myapp
 
 # Setup Working DIR
 WORKDIR /usr/src/myapp
 
 # Start the Bot Service
-CMD ["java", "-jar", "*.jar"]
+CMD ["java", "-jar", "*.war"]
