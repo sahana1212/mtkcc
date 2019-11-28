@@ -15,7 +15,7 @@ terraform {
 	  vpc_security_group_ids = ["${var.sg-id}"] 
 	  
 	  tags = {
-	    Name = "sahana-vm-tf"
+	    Name = "mtkcc"
 	  }
 	  
 	  provisioner "file" {
