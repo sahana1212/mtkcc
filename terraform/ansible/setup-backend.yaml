@@ -3,45 +3,18 @@
   hosts: localhost
   connection: local  
   remote_user: root
+  pre_tasks:
+    - name: 'install python2'
+     raw: sudo apt-get install python -y
   tasks:
-    - name: Install aptitude using apt
-      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
-    - name: Install required system packages
-      apt: name={{ item }} state=latest update_cache=yes
-      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools'] 
-    - name: Add Docker GPG apt Key
-       apt_key: key
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-    - name: Add Docker Repository
-       apt_repository: docker-repo
-        repo: deb https://download.docker.com/linux/ubuntu xenial stable
-        state: present
-    - name: Update apt and install docker-ce
-       apt: update_cache=yes name=docker-ce state=latest
+    - name: 'install docker & docker-compose'
+      raw: sudo apt-get install docker.io -y; sudo apt-get install docker-compose -y;
     - name: Log into DockerHub
       docker_login:
        username: sahana1212
        password: sahana1212
-    - name: Create Container
-      docker_container:
-        name: mtkcc
-        image: sahana1212/mtkcc
-        ports:
-          - 80:8081
-        volumes:
-          - ./db:/docker-entrypoint-initdb.d
-          - my-datavolume:/var/lib/mysql
-    - name: Create Systemd Unit File as docker-mtkcc.service
-      template: src=systemd.j2 dest=/etc/systemd/system/docker-mtkcc.service
-    - name: reload systemd daemon
-      command: systemctl daemon-reload 
-    - name: Start & Enable docker-mtkcc service
-      service:
-        name: docker-mtkcc
-        state: started
-        enabled: yes
-    - name: check container status
-      command: docker ps
-      register: result
-    - debug: var=result.stdout
+    - name: Pulling docker image
+      shell: sudo docker pull sahana1212/mtkcc;
+    - name: Pulling docker image
+      shell: sudo docker run -dp 80:8080 mtkcc/mcc;
+
