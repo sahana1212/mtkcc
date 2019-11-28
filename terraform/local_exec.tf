@@ -19,7 +19,7 @@ terraform {
 	  }
 	  
 	  provisioner "file" {
-	    source      = "$WORKSPACE/deployment/docker-compose.yaml"
+	    source      = "../deployment/docker-compose.yaml"
 	    destination = "docker-compose.yaml"
 	       
 	       connection {
