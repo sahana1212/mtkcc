@@ -5,17 +5,13 @@
   become_method: sudo
   vars:
     doc_root: "/var/www/html"
-    
-  pre_tasks:
-    - name: 'install python2'
-      raw: sudo apt-get install python -y
   
   tasks:
-    - name: 'install docker & docker-compose'
+    - name: install docker & docker-compose
       raw: sudo apt-get install docker.io -y; sudo apt-get install docker-compose -y;
       
-    - name: 'Checking Docker and Docker-Compose Version'
+    - name: Checking Docker and Docker-Compose Version
       shell: sudo docker -v;sudo docker-compose -v;
       
-    - name: 'Running docker-compose up'
+    - name: Running docker-compose up
       shell: sudo docker-compose up -d
