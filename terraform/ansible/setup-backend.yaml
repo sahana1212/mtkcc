@@ -5,7 +5,7 @@
   remote_user: root
   pre_tasks:
     - name: 'install python2'
-     raw: sudo apt-get install python -y
+      raw: sudo apt-get install python -y
   tasks:
     - name: 'install docker & docker-compose'
       raw: sudo apt-get install docker.io -y; sudo apt-get install docker-compose -y;
