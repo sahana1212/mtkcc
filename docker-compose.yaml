@@ -14,8 +14,8 @@ services:
     - "my-datavolume:/var/lib/mysql"
   web:
     container_name: web
-    build: "./web"
-    image: octopent/cricket-app
+    build: "./"
+    image: sahana1212/cricket-app
     ports:
     - 80:8080
     depends_on:
