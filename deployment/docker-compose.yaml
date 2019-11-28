@@ -2,13 +2,13 @@ version: '2'
 services:
   db:
     container_name: db
-    image: octopent/cricket-app-db
+    image: sahana1212/cricket-app-db
     volumes:
     - "./db:/docker-entrypoint-initdb.d"
     - "my-datavolume:/var/lib/mysql"
   web:
     container_name: web
-    image: octopent/cricket-app
+    image: sahana1212/cricket-app
     ports:
     - 80:8080
     depends_on:
