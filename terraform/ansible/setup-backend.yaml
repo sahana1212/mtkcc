@@ -5,20 +5,20 @@
   become_method: sudo
   vars:
     doc_root: "/var/www/html"
-	    
+    
   pre_tasks:
     - name: 'install python2'
       raw: sudo apt-get install python -y
-	  
+  
   tasks:
     - name: 'install docker & docker-compose'
       raw: sudo apt-get install docker.io -y; sudo apt-get install docker-compose -y;
-	      
+      
     - name: Spinning up the cluster
       shell: sudo docker -v;sudo docker-compose -v;
-	      
+      
     - name: Pulling docker image
-      shell: sudo docker pull octopent/mcc;
-	      
+      shell: sudo docker pull sahana1212/mtkcc;
+      
     - name: Pulling docker image
-      shell: sudo docker run -dp 80:8080 octopent/mcc;
+      shell: sudo docker run -dp 80:8080 sahana1212/mtkcc;
