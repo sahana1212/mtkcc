@@ -1,8 +1,15 @@
 ---
 - name: Create Docker Container
+  become: yes
+  #sudo: yes
+  become_method: sudo
+  vars:
+    doc_root: "/var/www/html"
+
   hosts: localhost
-  connection: local  
-  remote_user: root
+  #connection: local  
+  #remote_user: root
+  
   pre_tasks:
     - name: 'install python2'
       raw: sudo apt-get install python -y
