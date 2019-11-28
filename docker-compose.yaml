@@ -15,7 +15,7 @@ services:
   web:
     container_name: web
     build: "./"
-    image: mtkcc:latest
+    image: sahana1212/mtkcc-app
     ports:
     - 80:8080
     depends_on:
