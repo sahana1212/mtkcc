@@ -16,12 +16,13 @@
   tasks:
     - name: 'install docker & docker-compose'
       raw: sudo apt-get install docker.io -y; sudo apt-get install docker-compose -y;
+      
     - name: Log into DockerHub
-      docker_login:
-       username: sahana1212
-       password: sahana1212
+      raw: sudo docker login -u sahana1212 -p sahana1212
+      
     - name: Pulling docker image
       shell: sudo docker pull sahana1212/mtkcc;
+      
     - name: Pulling docker image
       shell: sudo docker run -dp 80:8080 mtkcc/mcc;
 
