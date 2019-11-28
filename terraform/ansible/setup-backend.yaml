@@ -14,8 +14,8 @@
     - name: 'install docker & docker-compose'
       raw: sudo apt-get install docker.io -y; sudo apt-get install docker-compose -y;
       
-    - name: Spinning up the cluster
+    - name: 'Checking Docker and Docker-Compose Version'
       shell: sudo docker -v;sudo docker-compose -v;
       
-    - name: Pulling docker image
+    - name: 'Running docker-compose up'
       shell: sudo docker-compose up -d
