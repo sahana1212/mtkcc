@@ -14,11 +14,11 @@ services:
     - "my-datavolume:/var/lib/mysql"
   web:
     container_name: web
-    build: "./"
-    image: sahana1212/mtkcc-app
+    build: "./web"
+    image: octopent/cricket-app
     ports:
     - 80:8080
     depends_on:
       - db
- volumes:
-   my-datavolume:
+volumes:
+  my-datavolume:
