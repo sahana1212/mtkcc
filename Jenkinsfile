@@ -1,19 +1,60 @@
 node {
+    jdk = tool name: 'jenkins-jdk'
+    env.JAVA_HOME = "${jdk}"
     
-    stage('GIT-FETCH') {
-        git 'https://github.com/rathoremayank/mtkcc.git'
+    
+	stage('GITHUB CHECKOUT') {    
+	   git 'https://github.com/sahana1212/mtkcc.git'
+	}
+	
+	stage('DOWNLOADING ARTIFACTS') {          
+		server = Artifactory.server 'artifactory'
+		
+		downloadSpec = """{
+			"files": [{
+				"pattern": "sahana-artifactory/*.war",
+				"target": "web/"
+			}]
+		}"""          
+		
+		server.download(downloadSpec)
+	}
+		
+	stage('DOCKER-COMPOSE COMMAND') {
+		sh label: 'Docker', script: 'docker-compose up -d --build'
+	}
+	
+	stage('PUSH IMG TO DOCKERHUB'){
+         sh label: '', script: 'docker login -u sahana1212 -p sahana1212'
+         //sh label: '', script: 'docker tag mtkcc sahana1212/mtkcc'
+         sh label: '', script: 'docker push sahana1212/cricket-app'
+         
+         //GETTING ERROR HERE
     }
-    stage('BUILD DOCKER-IMAGE'){
-        sh label: '', script: 'docker build . -t octopent/mcc'
+    
+    stage('TERRAFORM [IaaC]'){
+        
+        tf_path = "terraform/"
+		
+		dir(tf_path) {    
+			sh label: 'terraform', script: '/bin/terraform  init'
+			sh label: 'terraform', script: '/bin/terraform  plan --out tfplan.out'
+			
+		}
+        
     }
-    stage('PUSH TO DOCKERHUB'){
-         sh label: '', script: 'docker login -u octopent -p Stop/Watch1'
-         sh label: '', script: 'docker push octopent/mcc'
+    
+    stage ('PROVISIONING RESOURCES [TF + Ansible]'){
+        dir(tf_path) {    
+			sh label: 'terraform', script: '/bin/terraform apply tfplan.out'
+		}
     }
-    stage('PULL FROM DOCKERHUB'){
-         sh label: '', script: 'docker pull octopent/mcc'
+    
+    stage ('CLEAN-UP'){
+        dir(tf_path) {    
+			sh label: 'terraform', script: '/bin/terraform destroy -input=false -auto-approve'
+		}
     }
-    stage('RUNNING A CONTAINER'){
-         sh label: '', script: 'docker run -dp 80:8080 --name mcc octopent/mcc'
-    }
+    
+    
 }
