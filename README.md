@@ -4,4 +4,3 @@ A Spring MVC Application called Mindtree Kalinga Cricket Portal. The application
 
 At the core, the web-application is a Maven Project. A MySQL database holds the information of the players and to perform DB Operation Hibernate Framework is used. 
 
-Hello
